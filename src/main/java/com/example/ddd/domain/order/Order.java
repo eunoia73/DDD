@@ -1,8 +1,20 @@
 package com.example.ddd.domain.order;
 
+import java.util.List;
+
 public class Order {
     private OrderState state;
     private ShippingInfo shippingInfo;
+    private List<OrderLine> orderLines;
+    private Money totalAmount;
+
+    public Order(List<OrderLine> orderLines) {
+        setOrderLines(orderLines);
+    }
+
+    public void changeShipped(){
+
+    }
 
     public void changeShippingInfo(ShippingInfo newShippingInfo) {
         if (!isShippingChangeable()) {
@@ -10,6 +22,28 @@ public class Order {
         }
         this.shippingInfo = newShippingInfo;
     }
+
+    public void cancel() {
+
+    }
+
+    public void completePayment() {
+
+    }
+
+    private void setOrderLines(List<OrderLine> orderLines) {
+        verifyAtLeastOneOrMoreOrderLines(orderLines);
+        this.orderLines = orderLines;
+//        calculateTotalAmounts();
+    }
+
+    // 최소 1개 이상의 주문 상품이 존재해야 한다.
+    private void verifyAtLeastOneOrMoreOrderLines(List<OrderLine> orderLines) {
+        if (orderLines == null || orderLines.isEmpty()) {
+            throw new IllegalArgumentException("주문 상품이 없습니다.");
+        }
+    }
+
 
     private boolean isShippingChangeable() {
         return state == OrderState.PAYMENT_WAITING ||
