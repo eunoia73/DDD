@@ -8,8 +8,9 @@ public class Order {
     private List<OrderLine> orderLines;
     private Money totalAmount;
 
-    public Order(List<OrderLine> orderLines) {
+    public Order(List<OrderLine> orderLines, ShippingInfo shippingInfo) {
         setOrderLines(orderLines);
+        setShippingInfo(shippingInfo);
     }
 
     public void changeShipped(){
@@ -43,12 +44,18 @@ public class Order {
             throw new IllegalArgumentException("주문 상품이 없습니다.");
         }
     }
-
     private void calculateTotalAmounts() {
         int sum = orderLines.stream()
                 .mapToInt(x -> x.getAmounts())
                 .sum();
         this.totalAmount = new Money(sum);
+    }
+
+    private void setShippingInfo(ShippingInfo shippingInfo) {
+        if(shippingInfo == null) {
+            throw new IllegalArgumentException("배송지 정보가 없습니다.");
+        }
+        this.shippingInfo = shippingInfo;
     }
 
     private boolean isShippingChangeable() {
