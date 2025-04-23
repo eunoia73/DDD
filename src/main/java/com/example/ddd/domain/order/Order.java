@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Order {
     private String orderNumber;
+    private Orderer orderer;
     private OrderState state;
     private ShippingInfo shippingInfo;
     private List<OrderLine> orderLines;
@@ -26,7 +27,8 @@ public class Order {
         return result;
     }
 
-    public Order(List<OrderLine> orderLines, ShippingInfo shippingInfo) {
+    public Order(Orderer orderer, List<OrderLine> orderLines, ShippingInfo shippingInfo, OrderState state) {
+        setOrderer(orderer);
         setOrderLines(orderLines);
         setShippingInfo(shippingInfo);
     }
@@ -46,6 +48,11 @@ public class Order {
 
     public void completePayment() {
 
+    }
+
+    private void setOrderer(Orderer orderer) {
+        if (orderer == null) throw new IllegalArgumentException("주문자 정보가 없습니다.");
+        this.orderer = orderer;
     }
 
     private void setOrderLines(List<OrderLine> orderLines) {
