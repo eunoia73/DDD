@@ -13,19 +13,17 @@ public class Order {
         setShippingInfo(shippingInfo);
     }
 
-    public void changeShipped(){
-
+    public void changeShipped() {
     }
 
     public void changeShippingInfo(ShippingInfo newShippingInfo) {
-        if (!isShippingChangeable()) {
-            throw new IllegalArgumentException("배송지 변경 불가" + state);
-        }
-        this.shippingInfo = newShippingInfo;
+        verifyNotYetShipped();
+        setShippingInfo(newShippingInfo);
     }
 
     public void cancel() {
-
+        verifyNotYetShipped();
+        this.state = OrderState.CANCELLED;
     }
 
     public void completePayment() {
@@ -44,6 +42,7 @@ public class Order {
             throw new IllegalArgumentException("주문 상품이 없습니다.");
         }
     }
+
     private void calculateTotalAmounts() {
         int sum = orderLines.stream()
                 .mapToInt(x -> x.getAmounts())
@@ -52,15 +51,16 @@ public class Order {
     }
 
     private void setShippingInfo(ShippingInfo shippingInfo) {
-        if(shippingInfo == null) {
+        if (shippingInfo == null) {
             throw new IllegalArgumentException("배송지 정보가 없습니다.");
         }
         this.shippingInfo = shippingInfo;
     }
 
-    private boolean isShippingChangeable() {
-        return state == OrderState.PAYMENT_WAITING ||
-                state == OrderState.PREPARING;
+    private void verifyNotYetShipped() {
+        if (state != OrderState.PAYMENT_WAITING && state != OrderState.PREPARING) {
+            throw new IllegalArgumentException("출고 되었습니다.");
+        }
     }
 
 }
