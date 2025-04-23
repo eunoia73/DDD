@@ -16,4 +16,9 @@ public class OrderLine {
     private int calculateAmounts() {
         return price * quantity;
     }
+
+    public int getAmounts() {
+        return amount;
+    }
+
 }

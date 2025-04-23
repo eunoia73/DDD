@@ -34,7 +34,7 @@ public class Order {
     private void setOrderLines(List<OrderLine> orderLines) {
         verifyAtLeastOneOrMoreOrderLines(orderLines);
         this.orderLines = orderLines;
-//        calculateTotalAmounts();
+        calculateTotalAmounts();
     }
 
     // 최소 1개 이상의 주문 상품이 존재해야 한다.
@@ -44,6 +44,12 @@ public class Order {
         }
     }
 
+    private void calculateTotalAmounts() {
+        int sum = orderLines.stream()
+                .mapToInt(x -> x.getAmounts())
+                .sum();
+        this.totalAmount = new Money(sum);
+    }
 
     private boolean isShippingChangeable() {
         return state == OrderState.PAYMENT_WAITING ||
