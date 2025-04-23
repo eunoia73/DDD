@@ -2,23 +2,23 @@ package com.example.ddd.domain.order;
 
 public class OrderLine {
     private Product product;
-    private int price;
+    private Money price;
     private int quantity;
-    private int amount;
+    private Money amounts;
 
-    public OrderLine(Product product, int price, int quantity, int amount) {
+    public OrderLine(Product product, Money price, int quantity, Money amount) {
         this.product = product;
         this.price = price;
         this.quantity = quantity;
-        this.amount = calculateAmounts();
+        this.amounts = calculateAmounts();
     }
 
-    private int calculateAmounts() {
-        return price * quantity;
+    private Money calculateAmounts() {
+        return price.multiply(quantity);
     }
 
     public int getAmounts() {
-        return amount;
+        return amounts.getValue();
     }
 
 }
