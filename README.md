@@ -32,5 +32,28 @@
 * 개념적으로 완전한 하나를 표현할 때 사용한다.
 * 값으로 취급하기 위해서 불변성(final, setter 금지), 동등성(equals, hashCode 재정의 필요), 유효성 검증 등을 보장해야한다.
 
+## 2. 아키텍처 개요
+표현 → 응용 → 도메인 → 인프라스트럭처 <br>
+1) 표현 - Controller, View
+2) 응용 - Service
+3) 도메인 - Entity, Value Object, Domain Service
+4) 인프라스트럭처 - Repository 구현체, 외부 API, DB <br>
+
+#### * DIP 의존성 역전 원칙
+CalculateDiscountService(고수준)
+1. 고객 정보를 구한다. → RDBMS에서 JPA로 구한다.(저수준)
+2. 룰을 이용해서 할인 금액을 구한다. → Drools로 룰을 적용한다.(저수준)
+→ 고수준의 모듈이 저수준의 모듈에 의존하고 있다.
+
+> 인프러스트럭처에 의존하게 되면 <br> 1.테스트의 어려움 <br> 2.기능 확장의 어려움(구현 방식 변경 어려움) <br> → DIP로 해결 가능하다. 
+
+CalculateDiscountService(고수준) → (interface)RuleDiscounter(고수준) <br>
+`                                           `↑ <br>
+`                                `DroolsRuleDiscounter(구현체, 저수준)
+ → 고수준 모듈은 저수준 모듈에 의존하지 않고 추상화된 인터페이스에 의존한다.
+ 
+> * 고수준 모듈 -  핵심로직. 추상적 
+> * 저수준 모듈 -  구현 세부 사항. 구체적
+
 <hr>
 [도메인 주도 개발 시작하기] 책을 읽고 정리한 내용입니다.
